@@ -30,7 +30,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<Book> getById(Long id) {
-        return this.bookRepository.findById(id);
+        return bookRepository.findById(id);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class BookServiceImpl implements BookService {
         if (book == null || book.getId() == null) {
             throw new IllegalArgumentException("Book id can't be null");
         }
-        return this.bookRepository.save(book);
+        return bookRepository.save(book);
     }
 
     @Override
@@ -54,6 +54,11 @@ public class BookServiceImpl implements BookService {
         if (book == null || book.getId() == null) {
             throw new IllegalArgumentException("Book id can't be null");
         }
-        this.bookRepository.delete(book);
+        bookRepository.delete(book);
+    }
+
+    @Override
+    public Optional<Book> getBookByIsbn(String isbn) {
+        return bookRepository.findByIsbn(isbn);
     }
 }

@@ -48,12 +48,12 @@ class BookServiceTest {
         Mockito.when(bookRepository.findAll(Mockito.any(Example.class), Mockito.any(PageRequest.class)))
                 .thenReturn(page);
 
-        Page<Book> resutl = bookService.find(book, pageRequest);
+        Page<Book> result = bookService.find(book, pageRequest);
 
-        Assertions.assertThat(resutl.getTotalElements()).isEqualTo(1);
-        Assertions.assertThat(resutl.getContent()).isEqualTo(bookList);
-        Assertions.assertThat(resutl.getPageable().getPageNumber()).isEqualTo(0);
-        Assertions.assertThat(resutl.getPageable().getPageSize()).isEqualTo(10);
+        Assertions.assertThat(result.getTotalElements()).isEqualTo(1);
+        Assertions.assertThat(result.getContent()).isEqualTo(bookList);
+        Assertions.assertThat(result.getPageable().getPageNumber()).isEqualTo(0);
+        Assertions.assertThat(result.getPageable().getPageSize()).isEqualTo(10);
     }
 
     @Test
@@ -143,5 +143,22 @@ class BookServiceTest {
         org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> bookService.delete(book));
 
         Mockito.verify(bookRepository, Mockito.never()).delete(book);
+    }
+
+    @Test
+    @DisplayName("Deve obter um livro pelo isbn")
+    void getBookByIsbnTest() {
+        String isbn = "123456";
+        Book book = Book.builder().id(1l).title("The legend").author("Test").isbn(isbn).build();
+        Mockito.when(bookRepository.findByIsbn(isbn)).thenReturn(Optional.of(book));
+
+        Optional<Book> foundBook = bookService.getBookByIsbn(isbn);
+
+        Mockito.verify(bookRepository, Mockito.times(1)).findByIsbn(isbn);
+        Assertions.assertThat(foundBook.isPresent()).isTrue();
+        Assertions.assertThat(foundBook.get().getId()).isEqualTo(book.getId());
+        Assertions.assertThat(foundBook.get().getTitle()).isEqualTo(book.getTitle());
+        Assertions.assertThat(foundBook.get().getAuthor()).isEqualTo(book.getAuthor());
+        Assertions.assertThat(foundBook.get().getIsbn()).isEqualTo(book.getIsbn());
     }
 }
