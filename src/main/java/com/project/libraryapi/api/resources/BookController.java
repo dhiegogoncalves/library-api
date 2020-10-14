@@ -6,8 +6,11 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import com.project.libraryapi.api.dtos.BookDTO;
+import com.project.libraryapi.api.dtos.LoanDTO;
 import com.project.libraryapi.models.entities.Book;
+import com.project.libraryapi.models.entities.Loan;
 import com.project.libraryapi.services.BookService;
+import com.project.libraryapi.services.LoanService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -33,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 public class BookController {
 
     private final BookService bookService;
+    private final LoanService loanService;
     private final ModelMapper modelMapper;
 
     @GetMapping
@@ -75,4 +79,17 @@ public class BookController {
         bookService.delete(book);
     }
 
+    @GetMapping("{id}/loans")
+    public Page<LoanDTO> loansByBook(@PathVariable Long id, Pageable pageable) {
+        Book book = bookService.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Page<Loan> result = loanService.getLoansByBook(book, pageable);
+
+        List<LoanDTO> list = result.getContent().stream().map(loan -> {
+            BookDTO bookDTO = modelMapper.map(loan.getBook(), BookDTO.class);
+            LoanDTO loanDTO = modelMapper.map(loan, LoanDTO.class);
+            loanDTO.setBook(bookDTO);
+            return loanDTO;
+        }).collect(Collectors.toList());
+        return new PageImpl<>(list, pageable, result.getTotalElements());
+    }
 }

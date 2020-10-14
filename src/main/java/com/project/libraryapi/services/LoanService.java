@@ -2,7 +2,9 @@ package com.project.libraryapi.services;
 
 import java.util.Optional;
 
+import com.project.libraryapi.api.dtos.LoanDTO;
 import com.project.libraryapi.api.dtos.LoanFilterDTO;
+import com.project.libraryapi.models.entities.Book;
 import com.project.libraryapi.models.entities.Loan;
 
 import org.springframework.data.domain.Page;
@@ -16,4 +18,6 @@ public interface LoanService {
     Loan update(Loan loan);
 
     Page<Loan> find(LoanFilterDTO loanFilterDTO, Pageable pageable);
+
+    Page<Loan> getLoansByBook(Book book, Pageable pageable);
 }

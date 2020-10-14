@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.project.libraryapi.api.dtos.BookDTO;
 import com.project.libraryapi.api.dtos.LoanDTO;
 import com.project.libraryapi.api.dtos.LoanFilterDTO;
 import com.project.libraryapi.api.dtos.ReturnedLoanDTO;
@@ -41,8 +42,12 @@ public class LoanController {
     @GetMapping
     public Page<LoanDTO> find(LoanFilterDTO loanFilterDTO, Pageable pageRequest) {
         Page<Loan> result = loanService.find(loanFilterDTO, pageRequest);
-        List<LoanDTO> list = result.getContent().stream().map(entity -> modelMapper.map(entity, LoanDTO.class))
-                .collect(Collectors.toList());
+        List<LoanDTO> list = result.getContent().stream().map(entity -> {
+            BookDTO bookDTO = modelMapper.map(entity.getBook(), BookDTO.class);
+            LoanDTO loanDTO = modelMapper.map(entity, LoanDTO.class);
+            loanDTO.setBook(bookDTO);
+            return loanDTO;
+        }).collect(Collectors.toList());
         return new PageImpl<>(list, pageRequest, result.getTotalElements());
     }
 
