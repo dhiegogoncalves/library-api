@@ -2,7 +2,6 @@ package com.project.libraryapi.services;
 
 import java.util.Optional;
 
-import com.project.libraryapi.api.dtos.LoanDTO;
 import com.project.libraryapi.api.dtos.LoanFilterDTO;
 import com.project.libraryapi.models.entities.Book;
 import com.project.libraryapi.models.entities.Loan;
