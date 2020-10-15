@@ -1,6 +1,7 @@
 package com.project.libraryapi.models.repositories;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import com.project.libraryapi.models.entities.Book;
@@ -61,5 +62,36 @@ class LoanRepositoryTest {
         Assertions.assertThat(result.getPageable().getPageSize()).isEqualTo(10);
         Assertions.assertThat(result.getPageable().getPageNumber()).isEqualTo(0);
         Assertions.assertThat(result.getTotalElements()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("Deve obter emprestimos cuja data emprestimo for menor ou igual a tres dias atras e nao retornados")
+    void findByLoanDateLessThanAndNotReturnedTest() {
+        Book book = Book.builder().title("The legend").author("Test").isbn("123456").build();
+        entityManager.persist(book);
+
+        Loan loan = Loan.builder().book(book).customer("user").customerEmail("user@email.com")
+                .loanDate(LocalDate.now().minusDays(5)).build();
+        entityManager.persist(loan);
+
+        List<Loan> result = loanRepository.findByLoanDateLessThanAndNotReturned(LocalDate.now().minusDays(4));
+
+        Assertions.assertThat(result).hasSize(1);
+        Assertions.assertThat(result).contains(loan);
+    }
+
+    @Test
+    @DisplayName("Deve retornar vazio quando nao houver emprestimos atrasados")
+    void notFindByLoanDateLessThanAndNotReturnedTest() {
+        Book book = Book.builder().title("The legend").author("Test").isbn("123456").build();
+        entityManager.persist(book);
+
+        Loan loan = Loan.builder().book(book).customer("user").customerEmail("user@email.com").loanDate(LocalDate.now())
+                .build();
+        entityManager.persist(loan);
+
+        List<Loan> result = loanRepository.findByLoanDateLessThanAndNotReturned(LocalDate.now().minusDays(4));
+
+        Assertions.assertThat(result).isEmpty();
     }
 }

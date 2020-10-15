@@ -1,5 +1,6 @@
 package com.project.libraryapi.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.project.libraryapi.api.dtos.LoanFilterDTO;
@@ -19,4 +20,6 @@ public interface LoanService {
     Page<Loan> find(LoanFilterDTO loanFilterDTO, Pageable pageable);
 
     Page<Loan> getLoansByBook(Book book, Pageable pageable);
+
+    List<Loan> getAllLateLoans();
 }

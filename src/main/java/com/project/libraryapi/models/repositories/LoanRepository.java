@@ -1,5 +1,8 @@
 package com.project.libraryapi.models.repositories;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import com.project.libraryapi.models.entities.Book;
 import com.project.libraryapi.models.entities.Loan;
 
@@ -20,4 +23,7 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
             Pageable pageable);
 
     Page<Loan> findByBook(Book book, Pageable pageable);
+
+    @Query(value = "select l from Loan as l where l.loanDate <= :threeDaysAgo and (l.returned is null or l.returned is false)")
+    List<Loan> findByLoanDateLessThanAndNotReturned(@Param("threeDaysAgo") LocalDate threeDaysAgo);
 }
