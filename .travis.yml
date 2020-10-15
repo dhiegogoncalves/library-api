@@ -3,5 +3,5 @@ jdk:
   - oraclejdk8
 dist: trusty
 before_install:
-  - chmod +x mvnw
   - cd library-api
+  - chmod +x mvnw
