@@ -8,6 +8,8 @@ import com.project.libraryapi.api.dtos.BookDTO;
 import com.project.libraryapi.api.exceptions.BusinessException;
 import com.project.libraryapi.models.entities.Book;
 import com.project.libraryapi.services.BookService;
+import com.project.libraryapi.services.LoanService;
+
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,6 +44,9 @@ class BookControllerTest {
 
     @MockBean
     BookService bookService;
+
+    @MockBean
+    LoanService loanService;
 
     @Test
     @DisplayName("Deve filtrar livros")
