@@ -1,3 +1,4 @@
+before_script: cd library-api
 language: java
 jdk:
     - oraclejdk8
