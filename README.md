@@ -1,4 +1,4 @@
-# LIBRARY-API
+# LIBRARY-API [![Build Status](https://travis-ci.com/dhiegogoncalves/library-api.svg?branch=master)](https://travis-ci.com/dhiegogoncalves/library-api)
 
 > Projeto de controle de aluguel de livros desenvolvido com Spring Boot utilizando a metodologia TDD.
 
