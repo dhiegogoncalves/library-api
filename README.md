@@ -5,7 +5,7 @@
 - http://localhost:8080/swagger-ui/
 
 <p align="center">
-    <img src="./api.png" alt="drawing" width="700"/>
+    <img src="./api.png" alt="drawing" width="850"/>
 </p>
 
 ## Spring Boot Admin
