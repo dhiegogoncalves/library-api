@@ -28,11 +28,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/loans")
 @RequiredArgsConstructor
+@Api(tags = { "Loan API" })
 public class LoanController {
 
     private final LoanService loanService;
@@ -40,6 +43,7 @@ public class LoanController {
     private final ModelMapper modelMapper;
 
     @GetMapping
+    @ApiOperation("Find loans by params")
     public Page<LoanDTO> find(LoanFilterDTO loanFilterDTO, Pageable pageRequest) {
         Page<Loan> result = loanService.find(loanFilterDTO, pageRequest);
         List<LoanDTO> list = result.getContent().stream().map(entity -> {
@@ -53,6 +57,7 @@ public class LoanController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Create a loan")
     public Long create(@RequestBody LoanFilterDTO loanDTO) {
         Book book = bookService.getBookByIsbn(loanDTO.getIsbn())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book not found"));
@@ -63,6 +68,7 @@ public class LoanController {
     }
 
     @PatchMapping("{id}")
+    @ApiOperation("Update loan status by id")
     public void returnBook(@PathVariable Long id, @RequestBody ReturnedLoanDTO returnedLoanDTO) {
         Loan loan = loanService.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         loan.setReturned(returnedLoanDTO.getReturned());
