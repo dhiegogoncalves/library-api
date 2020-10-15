@@ -31,11 +31,13 @@ import org.springframework.web.server.ResponseStatusException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
 @Api(tags = { "Book API" })
+@Slf4j
 public class BookController {
 
     private final BookService bookService;
@@ -63,6 +65,7 @@ public class BookController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation("Create a book")
     public BookDTO create(@RequestBody @Valid BookDTO bookDTO) {
+        log.info("creating a book for isbn: {}", bookDTO.getIsbn());
         Book book = modelMapper.map(bookDTO, Book.class);
         book = bookService.save(book);
         return modelMapper.map(book, BookDTO.class);
