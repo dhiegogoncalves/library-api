@@ -5,4 +5,4 @@ jdk:
 - oraclejdk8
 dist: trusty
 before_install:
-- chmod +x ./mvnw
+- git update-index --chmod=+x mvnw
